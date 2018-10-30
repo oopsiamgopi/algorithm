@@ -85,3 +85,4 @@ def dijsktra(graph, initial_node, end_node):
     return path
 
 print(dijsktra(graph, 'X', 'Y'))
+print(dijsktra(graph, 'X', 'G'))

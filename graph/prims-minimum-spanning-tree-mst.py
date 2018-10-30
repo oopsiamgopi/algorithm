@@ -1,28 +1,31 @@
 # A Python program for Prim's Minimum Spanning Tree (MST) algorithm. 
-# The program is for adjacency matrix representation of the graph 
-  
-import sys # Library for INT_MAX 
+'''
+Prim's algorithm is a greedy algorithm that finds a minimum spanning tree 
+for a weighted undirected graph. This means it finds a subset of the edges 
+that forms a tree that includes every vertex, where the total weight of all 
+the edges in the tree is minimized
+'''
+import sys
   
 class Graph(): 
   
     def __init__(self, vertices): 
-        self.V = vertices 
-        self.graph = [[0 for column in range(vertices)]  
-                    for row in range(vertices)] 
+        self.V = vertices
+        self.graph = [[0] * vertices]* vertices
   
     # A utility function to print the constructed MST stored in parent[] 
     def printMST(self, parent): 
         print "Edge \tWeight"
         for i in range(1,self.V): 
             print parent[i],"-",i,"\t",self.graph[i][ parent[i] ] 
+    '''
+    A utility function to find the vertex with
+    minimum distance value, from the set of vertices
+    not yet included in shortest path tree
+    '''
+    def minKey(self, key, mstSet):
   
-    # A utility function to find the vertex with  
-    # minimum distance value, from the set of vertices  
-    # not yet included in shortest path tree 
-    def minKey(self, key, mstSet): 
-  
-        # Initilaize min value 
-        min = sys.maxint 
+        min = float('inf')
   
         for v in range(self.V): 
             if key[v] < min and mstSet[v] == False: 
@@ -36,10 +39,12 @@ class Graph():
     def primMST(self): 
   
         #Key values used to pick minimum weight edge in cut 
-        key = [sys.maxint] * self.V 
+        distance = [float('inf')] * self.V
+
         parent = [None] * self.V # Array to store constructed MST 
+
         # Make key 0 so that this vertex is picked as first vertex 
-        key[0] = 0 
+        distance[0] = 0 
         mstSet = [False] * self.V 
   
         parent[0] = -1 # First node is always the root of 
@@ -49,7 +54,8 @@ class Graph():
             # Pick the minimum distance vertex from  
             # the set of vertices not yet processed.  
             # u is always equal to src in first iteration 
-            u = self.minKey(key, mstSet) 
+            u = self.minKey(distance, mstSet)
+            #print(u,'-----')
   
             # Put the minimum distance vertex in  
             # the shortest path tree 
@@ -63,10 +69,12 @@ class Graph():
                 # graph[u][v] is non zero only for adjacent vertices of m 
                 # mstSet[v] is false for vertices not yet included in MST 
                 # Update the key only if graph[u][v] is smaller than key[v] 
-                if self.graph[u][v] > 0 and mstSet[v] == False and key[v] > self.graph[u][v]: 
-                        key[v] = self.graph[u][v] 
-                        parent[v] = u 
-  
+                if self.graph[u][v] > 0 and mstSet[v] == False and distance[v] > self.graph[u][v]: 
+                    #print(u, v, self.graph[u][v])
+                    distance[v] = self.graph[u][v] 
+                    parent[v] = u 
+        print(parent)
+        print(distance)
         self.printMST(parent) 
   
 g = Graph(5) 
@@ -75,5 +83,14 @@ g.graph = [ [0, 2, 0, 6, 0],
             [0, 3, 0, 0, 7], 
             [6, 8, 0, 0, 9], 
             [0, 5, 7, 9, 0]] 
+'''
+           2         3 
+        (0)-----(1)------(2) 
+        |  \  /  |      /
+       6|  8/ \5 |5   /7
+        | /     \|  /
+        (3)------(4) 
+              9
+'''
   
 g.primMST()
