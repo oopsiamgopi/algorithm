@@ -1,5 +1,5 @@
 import sys
-
+#Work with sorted list
 def binary_search_practice(low, high, source_list, search_value):
     if low<=high:
         mid=(low+high)/2
